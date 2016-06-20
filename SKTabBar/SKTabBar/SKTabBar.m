@@ -14,7 +14,6 @@
 /** tabBar中间按钮 */
 @property (nonatomic, strong) UIButton *centerBtn;
 
-
 @end
 
 
@@ -50,6 +49,9 @@
     [self setCenterTabBarItemImageName:imageName];
     [self setCenterTabBarItemBackgroundImageName:backgroundImageName];
 }
+
+
+
 
 - (void)layoutSubviews
 {
@@ -97,20 +99,58 @@
     [self addSubview:tabBarItem];
 }
 
-//- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImages:(NSArray *)images animationDuration:(NSInteger)duration
-//{
-//    SKTabBarItem *tabBarItem = [[SKTabBarItem alloc] init];
-//    tabBarItem.item = item;
-//    tabBarItem.tag = item.tag;
-//    [tabBarItem setTitleColor:self.titleColor forState:UIControlStateNormal];
-//    [tabBarItem setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
-//    [tabBarItem setTitle:item.title forState:UIControlStateNormal];
-//    [tabBarItem setImage:item.image forState:UIControlStateNormal];
-//    [tabBarItem setImage:item.selectedImage forState:UIControlStateSelected];
-//    tabBarItem.imageView.animationImages = images;
-//    [tabBarItem addTarget:self action:@selector(tabBarItemClicked:) forControlEvents:UIControlEventTouchUpInside];
-//    [self addSubview:tabBarItem];
-//}
+- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImages:(NSArray *)images animationDuration:(NSInteger)duration repeatCount:(NSInteger)repeatCount
+{
+    SKTabBarItem *tabBarItem = [[SKTabBarItem alloc] init];
+    tabBarItem.item = item;
+    tabBarItem.tag = item.tag;
+    tabBarItem.images = images;
+    tabBarItem.duration = duration;
+    tabBarItem.repeatCount = repeatCount;
+    [tabBarItem setTitleColor:self.titleColor forState:UIControlStateNormal];
+    [tabBarItem setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
+    [tabBarItem setTitle:item.title forState:UIControlStateNormal];
+    [tabBarItem setImage:item.image forState:UIControlStateNormal];
+    [tabBarItem setImage:item.selectedImage forState:UIControlStateSelected];
+    [tabBarItem addTarget:self action:@selector(tabBarItemClickedWithAnimation:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:tabBarItem];
+}
+
+- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImageName:(NSString *)imageName row:(NSInteger)row column:(NSInteger)column animationDuration:(NSInteger)duration repeatCount:(NSInteger)repeatCount
+{
+    [self addAnimationTabBarItem:item withAnimationImages:[self getImagesWithImageName:imageName row:12 column:8 withScale:[UIScreen mainScreen].scale] animationDuration:duration repeatCount:repeatCount];
+}
+
+/**
+ *  分割图片
+ *
+ *  @param imageName 原始图片
+ *  @param scale     每个坐标点单一坐标轴上的像素点的倍数 @2x  @3x
+ *
+ *  @return 分割后的图片数组
+ */
+- (NSArray *)getImagesWithImageName:(NSString *)imageName row:(NSInteger)row column:(NSInteger)column withScale:(NSInteger)scale
+{
+    UIImage *image = [UIImage imageNamed:imageName];
+    NSMutableArray *images = [NSMutableArray array];
+    
+    for (int j = 0; j < row; j++) {
+        for (int i = 0; i < column; i++) {
+            CGRect rect;
+            rect.size = CGSizeMake(image.size.width / column * scale, image.size.height / row * scale);
+            rect.origin.x = image.size.width / column * i * scale;
+            rect.origin.y = image.size.height / row * j * scale;
+            CGImageRef temImage = image.CGImage;
+            temImage = CGImageCreateWithImageInRect(temImage, rect);
+            UIImage *subImage = [UIImage imageWithCGImage:temImage];
+            [images addObject:subImage];
+            CGImageRelease(temImage);
+        }
+    }
+    return images;
+}
+
+
 
 /** tabBarItem点击事件 */
 - (void)tabBarItemClicked:(SKTabBarItem *)item
@@ -134,6 +174,13 @@
             [self.delegate sk_tabBar:self didSelectedTabBarItem:item];
         }
     }
+}
+
+- (void)tabBarItemClickedWithAnimation:(SKTabBarItem *)item
+{
+    [self.selectedItem.imageView stopAnimating];    //关闭前一个按钮的动画,否则动画结束时会保留动画开始前个图片
+    [self tabBarItemClicked:item];
+    [item.imageView startAnimating];
 }
 
 /** 中心按钮点击事件 */

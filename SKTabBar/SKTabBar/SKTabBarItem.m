@@ -33,6 +33,64 @@
     return self;
 }
 
+
+- (void)setImages:(NSArray *)images
+{
+    if (!images) {
+        return;
+    }
+    NSMutableArray *tempImages = [NSMutableArray array];
+    if (images) {
+        for (UIImage *tempImage in images) {
+            [tempImages addObject:[self scaleToSize:CGSizeMake(30, 30) withImage:tempImage]];
+        }
+    }
+    self.imageView.animationImages = images;
+    _images = tempImages;
+}
+
+- (void)setDuration:(NSInteger)duration
+{
+    self.imageView.animationDuration = duration;
+    _duration = duration;
+}
+
+- (void)setRepeatCount:(NSInteger)repeatCount
+{
+    self.imageView.animationRepeatCount = repeatCount;
+    _repeatCount = repeatCount;
+}
+
+/**
+ *  缩放图片
+ *
+ *  @param size  缩放后的尺寸
+ *  @param image 原始图片
+ *
+ *  @return 缩放后的图片
+ */
+-(UIImage*)scaleToSize:(CGSize)size withImage:(UIImage *)image
+{
+    // 创建一个bitmap的context
+    // 并把它设置成为当前正在使用的context
+    //Determine whether the screen is retina
+    if([[UIScreen mainScreen] scale] == 2.0){
+        UIGraphicsBeginImageContextWithOptions(size, NO, 2.0);
+    }else{
+        UIGraphicsBeginImageContext(size);
+    }
+    // 绘制改变大小的图片
+    
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    // 从当前context中创建一个改变大小后的图片
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    // 返回新的改变大小后的图片
+    return scaledImage;
+}
+
+
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
 {
     [super setTitleColor:color forState:state];

@@ -61,8 +61,10 @@
     [vc.tabBarItem setSelectedImage:[[UIImage imageNamed:[NSString stringWithFormat:@"%@_highlighted",imageName]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self addChildViewController:nav];
-    [tabBar addTabBarItem:vc.tabBarItem];
+//    [tabBar addTabBarItem:vc.tabBarItem];
+    [tabBar addAnimationTabBarItem:vc.tabBarItem withAnimationImageName:@"fav02c-sheet" row:8 column:6 animationDuration:3 repeatCount:1];
 }
+
 
 
 - (void)didReceiveMemoryWarning {

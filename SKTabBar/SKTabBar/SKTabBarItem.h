@@ -36,4 +36,15 @@
 
 /** selected 图片 */
 @property (readonly, nonatomic, strong) UIImage *selectedImage;
+
+/** 动画时长 */
+@property (nonatomic, assign) NSInteger duration;
+
+/** 动画重复次数 */
+@property (nonatomic, assign) NSInteger repeatCount;
+
+/** 动画图片数组 */
+@property (nonatomic, strong) NSArray *images;
+
+
 @end

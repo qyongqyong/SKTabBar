@@ -77,6 +77,18 @@
  *  @param images 动画图片数组
  *  @param duration 动画时长
  */
-- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImages:(NSArray *)images animationDuration:(NSInteger)duration;
+- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImages:(NSArray *)images animationDuration:(NSInteger)duration repeatCount:(NSInteger)repeatCount;
+
+
+/**
+ *  添加带动画的tabBarItem
+ *
+ *  @param item   item
+ *  @param row  原始图片要分割成的行数
+ *  @param column  原始图片要分割的列数
+ *  @param imageName 要进行分割的原始图片
+ *  @param duration 动画时长
+ */
+- (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImageName:(NSString *)imageName row:(NSInteger)row column:(NSInteger)column animationDuration:(NSInteger)duration repeatCount:(NSInteger)repeatCount;
 
 @end
