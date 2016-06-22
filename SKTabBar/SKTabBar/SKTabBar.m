@@ -118,6 +118,9 @@
 
 - (void)addAnimationTabBarItem:(UITabBarItem *)item withAnimationImageName:(NSString *)imageName row:(NSInteger)row column:(NSInteger)column animationDuration:(NSInteger)duration repeatCount:(NSInteger)repeatCount
 {
+    if ([UIImage imageNamed:imageName] == nil) {
+        return;
+    }
     [self addAnimationTabBarItem:item withAnimationImages:[self getImagesWithImageName:imageName row:12 column:8 withScale:[UIScreen mainScreen].scale] animationDuration:duration repeatCount:repeatCount];
 }
 

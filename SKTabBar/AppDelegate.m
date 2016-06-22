@@ -19,6 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
     SKTabBarController *skt = [[SKTabBarController alloc] init];
     self.window.rootViewController = skt;
     [self.window makeKeyAndVisible];

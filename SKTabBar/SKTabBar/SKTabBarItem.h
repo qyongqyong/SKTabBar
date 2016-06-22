@@ -10,9 +10,6 @@
 
 @interface SKTabBarItem : UIButton
 
-
-
-
 /** 图片占整个item的比例 default 0.7 */
 @property (nonatomic, assign) CGFloat ratio;
 
